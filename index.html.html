@@ -1,51 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jewelry Price Calculator</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { 
-      background: linear-gradient(135deg, #f0f4f8, #d9e4ec); 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    }
-    .card { 
-      border-radius: 20px; 
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
-    }
-    .btn-primary {
-      background: linear-gradient(90deg, #0d6efd, #3b82f6);
-      border: none;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #3b82f6, #0d6efd);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .table {
-      background: white; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    th { 
-      background: #0d6efd; 
-      color: white; 
-      text-transform: uppercase; 
-      font-size: 14px;
-      letter-spacing: 0.5px;
-    }
-    td {
-      vertical-align: middle;
-      font-weight: 500;
-    }
-    h3 {
-      font-weight: 700;
-      color: #0d6efd;
-    }
+    body { background: linear-gradient(135deg,#f0f4f8,#d9e4ec); font-family:'Segoe UI',sans-serif; }
+    .card { border-radius:20px; box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+    .btn-primary { background:linear-gradient(90deg,#0d6efd,#3b82f6); border:none; font-weight:500; transition:0.3s; }
+    .btn-primary:hover { background:linear-gradient(90deg,#3b82f6,#0d6efd); transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+    .table { background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+    th { background:#0d6efd; color:white; text-transform:uppercase; font-size:14px; letter-spacing:0.5px; }
+    td { vertical-align:middle; font-weight:500; }
+    h3 { font-weight:700; color:#0d6efd; }
   </style>
 </head>
 <body>
@@ -68,8 +36,27 @@
           <div class="col-12"><label class="form-label">Diamonds (4 to 5 ct)</label><input type="number" id="diamond3_1" class="form-control shadow-sm" value="0"></div>
         </div>
 
-        <div class="text-center mt-4">
-          <button class="btn btn-primary w-100 py-2" onclick="calculatePrice()">Calculate</button>
+        <!-- Buttons with HTML tooltips (line breaks) -->
+        <div class="text-center mt-4 d-flex gap-2">
+          <button 
+            class="btn btn-primary w-50 py-2" 
+            onclick="calculatePrice('solitaire')"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-html="true"
+            title="<strong>Solitaire:</strong><br>💍0.50 ct up koy pan solitaire jewelry mate mane use karo (like: ring, necklace, earring, bracelet).<br><strong>📌Note:</strong> Jojo ak pan diamond 0.50 ct up hoy to pan manej use karo.">
+            Solitaire
+          </button>
+          
+          <button 
+            class="btn btn-primary w-50 py-2" 
+            onclick="calculatePrice('band')"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-html="true"
+            title="<strong>Band:</strong><br>💍Koy pan multi-size diamond all under 0.50 ct mate mane use karo <br>(like: all minimalist jewelry).">
+            Band
+          </button>
         </div>
 
         <!-- Results -->
@@ -84,7 +71,7 @@
 </div>
 
 <script>
-function calculatePrice() {
+function calculatePrice(type) {
   let metalWeight = parseFloat(document.getElementById("metalWeight").value) || 0;
   let d0_80 = parseFloat(document.getElementById("diamond0_80").value) || 0;
   let d1_25 = parseFloat(document.getElementById("diamond1_25").value) || 0;
@@ -94,28 +81,34 @@ function calculatePrice() {
 
   let diamondCost = (d0_80 * 10000) + (d1_25 * 12000) + (d2 * 14000) + (d2_3 * 16000) + (d3_1 * 18000);
 
-  // Making calculations
+  // factors
+  let finalFactor = type === "solitaire" ? 2.2 : 2.0;
+  let listingFactor = type === "solitaire" ? 2.75 : 2.5;
+
+  // silver
   let silverMakingDiv = ((metalWeight*250 + metalWeight*1000 + diamondCost + 8500) / 85);
-  let silverFinal = silverMakingDiv * 2.2;
-  let silverListing = silverMakingDiv * 2.75;
+  let silverFinal = silverMakingDiv * finalFactor;
+  let silverListing = silverMakingDiv * listingFactor;
 
+  // gold 10k
   let gold10kMakingDiv = ((metalWeight*6000 + metalWeight*1000 + diamondCost + 8500) / 85);
-  let gold10kFinal = gold10kMakingDiv * 2.2;
-  let gold10kListing = gold10kMakingDiv * 2.75;
+  let gold10kFinal = gold10kMakingDiv * finalFactor;
+  let gold10kListing = gold10kMakingDiv * listingFactor;
 
+  // gold 14k
   let gold14kMakingDiv = ((metalWeight*8500 + metalWeight*1000 + diamondCost + 8500) / 85);
-  let gold14kFinal = gold14kMakingDiv * 2.2;
-  let gold14kListing = gold14kMakingDiv * 2.75;
+  let gold14kFinal = gold14kMakingDiv * finalFactor;
+  let gold14kListing = gold14kMakingDiv * listingFactor;
 
+  // gold 18k
   let gold18kMakingDiv = ((metalWeight*10500 + metalWeight*1000 + diamondCost + 8500) / 85);
-  let gold18kFinal = gold18kMakingDiv * 2.2;
-  let gold18kListing = gold18kMakingDiv * 2.75;
+  let gold18kFinal = gold18kMakingDiv * finalFactor;
+  let gold18kListing = gold18kMakingDiv * listingFactor;
 
-  function format(value) {
-    return value.toFixed(2);
-  }
+  function format(value) { return value.toFixed(2); }
 
   document.getElementById("results").innerHTML = `
+    <h6 class="text-center mb-2">${type === "solitaire" ? "💍 Solitaire Ring" : "💍 Band Ring"} Calculation</h6>
     <table class="table table-bordered table-hover text-center align-middle">
       <thead>
         <tr>
@@ -155,13 +148,21 @@ function calculatePrice() {
   `;
 }
 
-// Trigger with Enter key
+// Enter key = solitaire default
 document.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") calculatePrice();
+  if (e.key === "Enter") calculatePrice('solitaire');
+});
+
+// Enable tooltips (Bootstrap)
+document.addEventListener("DOMContentLoaded", function () {
+  let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    // Using data-bs-html="true" so <br> works; default arrow will be shown
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
 });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
