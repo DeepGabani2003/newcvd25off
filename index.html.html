@@ -56,9 +56,7 @@
             data-bs-html="true"
             title="⭕ <strong>Band:</strong><br>👉 Koy pan multi-size diamond all under 0.50 ct mate mane use karo (like: all minimalist jewelry).">
             ⭕ Band
-</button>
-
-
+          </button>
         </div>
 
         <!-- Results -->
@@ -83,34 +81,40 @@ function calculatePrice(type) {
 
   let diamondCost = (d0_80 * 10000) + (d1_25 * 12000) + (d2 * 14000) + (d2_3 * 16000) + (d3_1 * 18000);
 
+  // Conversion rates
+  let silverWeight = metalWeight * 0.76;
+  let gold10kWeight = metalWeight * 0.80;
+  let gold14kWeight = metalWeight * 0.90;
+  let gold18kWeight = metalWeight * 1.00;
+
   // factors
   let finalFactor = type === "solitaire" ? 2.2 : 2.0;
   let listingFactor = type === "solitaire" ? 2.75 : 2.5;
 
   // silver
-  let silverMakingDiv = ((metalWeight*250 + metalWeight*1000 + diamondCost + 8500) / 85);
+  let silverMakingDiv = ((silverWeight*250 + silverWeight*1000 + diamondCost + 8500) / 85);
   let silverFinal = silverMakingDiv * finalFactor;
   let silverListing = silverMakingDiv * listingFactor;
 
   // gold 10k
-  let gold10kMakingDiv = ((metalWeight*6000 + metalWeight*1000 + diamondCost + 8500) / 85);
+  let gold10kMakingDiv = ((gold10kWeight*6000 + gold10kWeight*1000 + diamondCost + 8500) / 85);
   let gold10kFinal = gold10kMakingDiv * finalFactor;
   let gold10kListing = gold10kMakingDiv * listingFactor;
 
   // gold 14k
-  let gold14kMakingDiv = ((metalWeight*8500 + metalWeight*1000 + diamondCost + 8500) / 85);
+  let gold14kMakingDiv = ((gold14kWeight*8500 + gold14kWeight*1000 + diamondCost + 8500) / 85);
   let gold14kFinal = gold14kMakingDiv * finalFactor;
   let gold14kListing = gold14kMakingDiv * listingFactor;
 
   // gold 18k
-  let gold18kMakingDiv = ((metalWeight*10500 + metalWeight*1000 + diamondCost + 8500) / 85);
+  let gold18kMakingDiv = ((gold18kWeight*10500 + gold18kWeight*1000 + diamondCost + 8500) / 85);
   let gold18kFinal = gold18kMakingDiv * finalFactor;
   let gold18kListing = gold18kMakingDiv * listingFactor;
 
   function format(value) { return value.toFixed(2); }
 
   document.getElementById("results").innerHTML = `
-    <h6 class="text-center mb-2">${type === "solitaire" ? "💍 Solitaire Ring" : "💍 Band Ring"} Calculation</h6>
+    <h6 class="text-center mb-2">${type === "solitaire" ? "💍 Solitaire Ring" : "⭕ Band Ring"} Calculation</h6>
     <table class="table table-bordered table-hover text-center align-middle">
       <thead>
         <tr>
@@ -159,7 +163,6 @@ document.addEventListener("keydown", function(e) {
 document.addEventListener("DOMContentLoaded", function () {
   let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (tooltipTriggerEl) {
-    // Using data-bs-html="true" so <br> works; default arrow will be shown
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 });
@@ -168,6 +171,3 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
