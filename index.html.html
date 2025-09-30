@@ -36,15 +36,15 @@
           <div class="col-12"><label class="form-label">Diamonds (4 to 5 ct)</label><input type="number" id="diamond3_1" class="form-control shadow-sm" value="0"></div>
         </div>
 
-        <!-- Buttons with HTML tooltips (line breaks) -->
+        <!-- Buttons with tooltips -->
         <div class="text-center mt-4 d-flex gap-2">
-         <button 
+          <button 
             class="btn btn-primary w-50 py-2" 
             onclick="calculatePrice('solitaire')"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
             data-bs-html="true"
-            title="💍 <strong>Solitaire:</strong><br>👉 0.50 ct up koy pan solitaire jewelry mate mane use karo (like: ring, necklace, earring, bracelet).<br>✋ <strong>Note:</strong> Jojo ak pan diamond 0.50 ct up hoy to pan manej use karo.">
+            title="💍 <strong>Solitaire:</strong><br>👉 0.50 ct up koy pan solitaire jewelry mate mane use karo (like: ring, necklace, earring, bracelet).<br>✋ <strong>Note:</strong><br>Jojo ak pan diamond 0.50 ct up hoy to pan manej use karo.">
             💍 Solitaire
           </button>
           
@@ -56,9 +56,7 @@
             data-bs-html="true"
             title="⭕ <strong>Band:</strong><br>👉 Koy pan multi-size diamond all under 0.50 ct mate mane use karo (like: all minimalist jewelry).">
             ⭕ Band
-</button>
-
-
+          </button>
         </div>
 
         <!-- Results -->
@@ -83,9 +81,9 @@ function calculatePrice(type) {
 
   let diamondCost = (d0_80 * 10000) + (d1_25 * 12000) + (d2 * 14000) + (d2_3 * 16000) + (d3_1 * 18000);
 
-  // factors
-  let finalFactor = type === "solitaire" ? 2.2 : 1.8;
-  let listingFactor = type === "solitaire" ? 2.75 : 2.25;
+  // multipliers
+  let finalFactor = (type === "solitaire") ? 2.2 : 1.8;
+  let listingFactor = (type === "solitaire") ? 2.75 : 2.25;
 
   // silver
   let silverMakingDiv = ((metalWeight*250 + metalWeight*1000 + diamondCost + 8500) / 85);
@@ -98,19 +96,19 @@ function calculatePrice(type) {
   let gold10kListing = gold10kMakingDiv * listingFactor;
 
   // gold 14k
-  let gold14kMakingDiv = ((metalWeight*8400 + metalWeight*1000 + diamondCost + 8500) / 85);
+  let gold14kMakingDiv = ((metalWeight*8500 + metalWeight*1000 + diamondCost + 8500) / 85);
   let gold14kFinal = gold14kMakingDiv * finalFactor;
   let gold14kListing = gold14kMakingDiv * listingFactor;
 
   // gold 18k
-  let gold18kMakingDiv = ((metalWeight*10700 + metalWeight*1000 + diamondCost + 8500) / 85);
+  let gold18kMakingDiv = ((metalWeight*10500 + metalWeight*1000 + diamondCost + 8500) / 85);
   let gold18kFinal = gold18kMakingDiv * finalFactor;
   let gold18kListing = gold18kMakingDiv * listingFactor;
 
   function format(value) { return value.toFixed(2); }
 
   document.getElementById("results").innerHTML = `
-    <h6 class="text-center mb-2">${type === "solitaire" ? "💍 Solitaire Ring" : "💍 Band Ring"} Calculation</h6>
+    <h6 class="text-center mb-2">${type === "solitaire" ? "💍 Solitaire Jewelry" : "⭕ Band Jewelry"} Calculation</h6>
     <table class="table table-bordered table-hover text-center align-middle">
       <thead>
         <tr>
@@ -155,11 +153,10 @@ document.addEventListener("keydown", function(e) {
   if (e.key === "Enter") calculatePrice('solitaire');
 });
 
-// Enable tooltips (Bootstrap)
+// Enable tooltips
 document.addEventListener("DOMContentLoaded", function () {
   let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (tooltipTriggerEl) {
-    // Using data-bs-html="true" so <br> works; default arrow will be shown
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 });
@@ -168,12 +165,3 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
