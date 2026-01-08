@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kaizen Group - Dashboard</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+
+  <style>
+    :root{
+      --bg1:#eef3f8; --bg2:#d7e2ee; --card:#ffffff; --text:#0f172a; --muted:#64748b;
+      --line:rgba(15,23,42,.08); --brand1:#0d6efd; --brand2:#3b82f6;
+      --shadow: 0 10px 28px rgba(15,23,42,.12); --shadow2: 0 6px 16px rgba(15,23,42,.10);
+      --radius: 18px;
+    }
+    [data-theme="dark"]{
+      --bg1:#0b1220; --bg2:#0e1a2f; --card:#0f1b33; --text:#e6edf7; --muted:#9fb0c7;
+      --line:rgba(230,237,247,.10); --shadow: 0 12px 30px rgba(0,0,0,.35); --shadow2: 0 8px 18px rgba(0,0,0,.28);
+    }
+    body{
+      min-height:100vh;
+      background: radial-gradient(1200px 500px at 10% 0%, rgba(13,110,253,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(59,130,246,.16), transparent 55%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .app{ display:flex; min-height:100vh; }
+    .sidebar{
+      width: 300px; position: sticky; top:0; height:100vh;
+      padding: 18px 14px; border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 82%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .brand{ display:flex; align-items:center; gap:10px; padding: 10px 10px 14px; border-bottom:1px solid var(--line); margin-bottom:14px;}
+    .brand .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: color-mix(in srgb, var(--card) 85%, transparent);
+      border:1px solid var(--line);
+      overflow:hidden; display:grid; place-items:center;
+      box-shadow:var(--shadow2);
+    }
+    .brand .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .brand h1{ font-size:15px; margin:0; font-weight:900;}
+    .brand p{ margin:0; font-size:12px; color:var(--muted); font-weight:650;}
+
+    .navpill{ display:flex; flex-direction:column; gap:8px; margin-top:12px; overflow:auto; padding-right:6px; max-height: calc(100vh - 160px); }
+    .nav-btn{
+      display:flex; align-items:center; gap:10px; padding:12px 12px; border-radius:14px;
+      border:1px solid transparent; background:transparent; color:var(--text); text-decoration:none; transition:.18s ease;
+    }
+    .nav-btn i{ font-size:18px; color:color-mix(in srgb, var(--text) 75%, var(--muted)); }
+    .nav-btn span{ font-weight:800; font-size:14px; }
+    .nav-btn small{ margin-left:auto; color:var(--muted); font-weight:800; }
+    .nav-btn:hover{ background: color-mix(in srgb, var(--brand1) 10%, transparent); border-color: color-mix(in srgb, var(--brand1) 18%, transparent); transform: translateY(-1px);}
+    .nav-btn.active{ background: linear-gradient(90deg, color-mix(in srgb, var(--brand1) 18%, transparent), color-mix(in srgb, var(--brand2) 12%, transparent));
+      border-color: color-mix(in srgb, var(--brand1) 25%, transparent); box-shadow:var(--shadow2);}
+    .nav-btn.active i{ color:var(--brand1); }
+
+    .sidebar-footer{
+      position:absolute; left:14px; right:14px; bottom:14px;
+      border-top: 1px solid var(--line); padding-top:12px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .mini{ display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; font-weight:800;}
+    .mini .dot{ width:8px;height:8px;border-radius:99px;background:#22c55e; box-shadow:0 0 0 6px rgba(34,197,94,.12); }
+
+    .main{ flex:1; padding: 26px 26px 34px; }
+    .cardx{ background:var(--card); border:1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .btn-brand{
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      border:none; color:#fff; font-weight:900; border-radius:999px; padding:10px 14px; box-shadow:var(--shadow2); transition:.2s ease;
+    }
+    .btn-brand:hover{ transform: translateY(-1px); box-shadow:var(--shadow); color:#fff;}
+    .btn-soft{
+      border:1px solid var(--line); background: color-mix(in srgb, var(--card) 85%, transparent);
+      color:var(--text); font-weight:900; border-radius:999px; padding:10px 14px; box-shadow:var(--shadow2); transition:.2s ease;
+    }
+    .btn-soft:hover{ transform: translateY(-1px); box-shadow:var(--shadow); }
+    .muted{ color:var(--muted); font-weight:650; }
+    .kpi{ padding:14px; border-radius:16px; border:1px solid var(--line); background: color-mix(in srgb, var(--card) 90%, transparent); box-shadow:var(--shadow2); }
+    .kpi small{ color:var(--muted); font-weight:800; }
+    .kpi b{ font-weight:950; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"><img src="logo.jpg" alt="Kaizen Group logo"></div>
+        <div>
+          <h1>Kaizen Group</h1>
+          <p>Pricing tools</p>
+        </div>
+      </div>
+
+      <div class="navpill">
+        <a class="nav-btn active" href="index.html"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span><small>Home</small></a>
+        <a class="nav-btn" href="metal.html"><i class="bi bi-calculator-fill"></i><span>Metal Conversion</span><small>WT</small></a>
+        <a class="nav-btn" href="cvd.html"><i class="bi bi-diamond-fill"></i><span>CVD Calculator</span><small>Live</small></a>
+        <a class="nav-btn" href="natural.html"><i class="bi bi-stars"></i><span>Natural Calculator</span><small>Pro</small></a>
+        <a class="nav-btn" href="canada.html"><i class="bi bi-flag-fill"></i><span>Canada (CAD)</span><small>FX</small></a>
+        <a class="nav-btn" href="cad.html"><i class="bi bi-image-fill"></i><span>CAD Images</span><small>SKU</small></a>
+        <a class="nav-btn" href="size.html"><i class="bi bi-rulers"></i><span>Size Chart</span><small>Guide</small></a>
+        <a class="nav-btn" href="settings.html"><i class="bi bi-gear-fill"></i><span>Settings</span><small>UI</small></a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="mini"><span class="dot"></span><span>Ready</span></div>
+        <button class="btn btn-soft btn-sm" id="toggleTheme" type="button" title="Toggle theme">
+          <i class="bi bi-moon-stars"></i>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="cardx p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+          <div>
+            <h3 class="mb-1" style="font-weight:950;">Dashboard</h3>
+            <div class="muted">Quick access to calculators and size chart.</div>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-brand" href="cvd.html"><i class="bi bi-diamond-fill me-1"></i> Open CVD</a>
+            <a class="btn btn-soft" href="natural.html"><i class="bi bi-stars me-1"></i> Natural</a>
+            <a class="btn btn-soft" href="metal.html"><i class="bi bi-calculator-fill me-1"></i> Metal</a>
+          </div>
+        </div>
+
+        <hr class="my-4" style="border-color:var(--line)">
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="kpi">
+              <small>Tool</small><br>
+              <b>CVD daily pricing</b>
+              <div class="muted mt-2" style="font-size:13px;">Fast calc + clean result table.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="kpi">
+              <small>Tool</small><br>
+              <b>Natural pricing</b>
+              <div class="muted mt-2" style="font-size:13px;">Complete natural ranges input.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="kpi">
+              <small>Tool</small><br>
+              <b>CAD image viewer</b>
+              <div class="muted mt-2" style="font-size:13px;">Type SKU → open image.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    function setTheme(mode){
+      if(mode === "dark") root.setAttribute("data-theme","dark");
+      else root.removeAttribute("data-theme");
+      localStorage.setItem("theme", mode);
+    }
+    function toggleThemeFn(){
+      const isDark = root.getAttribute("data-theme") === "dark";
+      setTheme(isDark ? "light" : "dark");
+    }
+    document.getElementById("toggleTheme").addEventListener("click", toggleThemeFn);
+    const savedTheme = localStorage.getItem("theme");
+    if(savedTheme) setTheme(savedTheme);
+  </script>
+</body>
+</html>

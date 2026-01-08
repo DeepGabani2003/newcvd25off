@@ -1,0 +1,77 @@
+/* === GLOBAL FONT RESET === */
+body{
+  font-weight: 400; /* base normal */
+}
+
+h1, h2, h3{
+  font-weight: 700;
+}
+
+h4, h5{
+  font-weight: 600;
+}
+
+p, span, div, td, th{
+  font-weight: 400;
+}
+.nav-btn span{
+  font-weight: 600;
+}
+
+.nav-btn small{
+  font-weight: 500;
+}
+.brand h1{
+  font-weight: 700;
+}
+
+.brand p{
+  font-weight: 500;
+}
+label.form-label{
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.form-control,
+.form-select{
+  font-weight: 400;
+  font-size: 14px;
+}
+.btn-brand,
+.btn-soft{
+  font-weight: 600;
+}
+thead th{
+  font-weight: 600;
+  font-size: 12px;
+}
+
+tbody td{
+  font-weight: 400;
+  font-size: 14px;
+}
+
+tbody td strong{
+  font-weight: 600;
+}
+thead th{
+  font-weight: 600;
+  font-size: 12px;
+}
+
+tbody td{
+  font-weight: 400;
+  font-size: 14px;
+}
+
+tbody td strong{
+  font-weight: 600;
+}
+.k{
+  font-weight: 500;
+}
+
+.v{
+  font-weight: 600;
+}

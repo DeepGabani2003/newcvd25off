@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kaizen Group - Natural Diamond Calculator</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+
+  <style>
+    :root{
+      --bg1:#eef3f8; --bg2:#d7e2ee; --card:#ffffff; --text:#0f172a; --muted:#64748b;
+      --line:rgba(15,23,42,.08); --brand1:#0d6efd; --brand2:#3b82f6;
+      --shadow: 0 10px 28px rgba(15,23,42,.12); --shadow2: 0 6px 16px rgba(15,23,42,.10);
+      --radius: 18px;
+    }
+    [data-theme="dark"]{
+      --bg1:#0b1220; --bg2:#0e1a2f; --card:#0f1b33; --text:#e6edf7; --muted:#9fb0c7;
+      --line:rgba(230,237,247,.10); --shadow: 0 12px 30px rgba(0,0,0,.35); --shadow2: 0 8px 18px rgba(0,0,0,.28);
+    }
+    body{
+      min-height:100vh;
+      background: radial-gradient(1200px 500px at 10% 0%, rgba(13,110,253,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(59,130,246,.16), transparent 55%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    .app{ display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar{
+      width: 300px; position: sticky; top:0; height:100vh;
+      padding: 18px 14px; border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 82%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .brand{ display:flex; align-items:center; gap:10px; padding: 10px 10px 14px; border-bottom:1px solid var(--line); margin-bottom:14px;}
+    .brand .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: color-mix(in srgb, var(--card) 85%, transparent);
+      border:1px solid var(--line);
+      overflow:hidden; display:grid; place-items:center;
+      box-shadow:var(--shadow2);
+    }
+    .brand .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .brand h1{ font-size:15px; margin:0; font-weight:900;}
+    .brand p{ margin:0; font-size:12px; color:var(--muted); font-weight:650;}
+
+    .navpill{ display:flex; flex-direction:column; gap:8px; margin-top:12px; overflow:auto; padding-right:6px; max-height: calc(100vh - 160px); }
+    .nav-btn{
+      display:flex; align-items:center; gap:10px; padding:12px 12px; border-radius:14px;
+      border:1px solid transparent; background:transparent; color:var(--text); text-decoration:none; transition:.18s ease;
+    }
+    .nav-btn i{ font-size:18px; color:color-mix(in srgb, var(--text) 75%, var(--muted)); }
+    .nav-btn span{ font-weight:800; font-size:14px; }
+    .nav-btn small{ margin-left:auto; color:var(--muted); font-weight:800; }
+    .nav-btn:hover{
+      background: color-mix(in srgb, var(--brand1) 10%, transparent);
+      border-color: color-mix(in srgb, var(--brand1) 18%, transparent);
+      transform: translateY(-1px);
+    }
+    .nav-btn.active{
+      background: linear-gradient(90deg, color-mix(in srgb, var(--brand1) 18%, transparent), color-mix(in srgb, var(--brand2) 12%, transparent));
+      border-color: color-mix(in srgb, var(--brand1) 25%, transparent);
+      box-shadow:var(--shadow2);
+    }
+    .nav-btn.active i{ color:var(--brand1); }
+
+    .sidebar-footer{
+      position:absolute; left:14px; right:14px; bottom:14px;
+      border-top: 1px solid var(--line); padding-top:12px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .mini{ display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; font-weight:800;}
+    .mini .dot{ width:8px;height:8px;border-radius:99px;background:#22c55e; box-shadow:0 0 0 6px rgba(34,197,94,.12); }
+
+    /* Main */
+    .main{ flex:1; padding: 26px 26px 34px; }
+    .cardx{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .muted{ color:var(--muted); font-weight:650; }
+
+    .btn-brand{
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      border:none; color:#fff; font-weight:900; border-radius:999px;
+      padding:10px 14px; box-shadow:var(--shadow2); transition:.2s ease;
+    }
+    .btn-brand:hover{ transform: translateY(-1px); box-shadow:var(--shadow); color:#fff; }
+
+    .btn-soft{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 85%, transparent);
+      color:var(--text); font-weight:900; border-radius:999px;
+      padding:10px 14px; box-shadow:var(--shadow2); transition:.2s ease;
+    }
+    .btn-soft:hover{ transform: translateY(-1px); box-shadow:var(--shadow); }
+
+    .form-control{
+      border-radius:14px !important;
+      border:1px solid var(--line) !important;
+      background: color-mix(in srgb, var(--card) 92%, transparent) !important;
+      color: var(--text) !important;
+      font-weight:650;
+    }
+    .form-control:focus{
+      box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--brand1) 20%, transparent) !important;
+      border-color: color-mix(in srgb, var(--brand1) 35%, transparent) !important;
+    }
+    label.form-label{
+      font-weight:900; font-size:13px;
+      color: color-mix(in srgb, var(--text) 80%, var(--muted));
+    }
+
+    .table-wrap{
+      margin-top: 14px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      box-shadow: var(--shadow2);
+    }
+    thead th{
+      background: linear-gradient(90deg, var(--brand1), var(--brand2)) !important;
+      color:#fff !important;
+      font-size:12px;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      border-color: rgba(255,255,255,.15) !important;
+    }
+    tbody td{
+      font-weight:850;
+      border-color: var(--line) !important;
+    }
+    .alert-soft{
+      border-radius:16px;
+      border:1px solid color-mix(in srgb, #ef4444 18%, transparent);
+      background: color-mix(in srgb, #ef4444 10%, var(--card));
+      padding: 12px 14px;
+      font-weight:800;
+    }
+    .foot{
+      margin-top: 14px;
+      color: var(--muted);
+      font-weight:650;
+      font-size: 12px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"><img src="logo.jpg" alt="Kaizen Group logo"></div>
+        <div>
+          <h1>Kaizen Group</h1>
+          <p>Pricing tools</p>
+        </div>
+      </div>
+
+      <div class="navpill">
+        <a class="nav-btn" href="index.html"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span><small>Home</small></a>
+        <a class="nav-btn" href="metal.html"><i class="bi bi-calculator-fill"></i><span>Metal Conversion</span><small>WT</small></a>
+        <a class="nav-btn" href="cvd.html"><i class="bi bi-diamond-fill"></i><span>CVD Calculator</span><small>Live</small></a>
+
+        <a class="nav-btn active" href="natural.html"><i class="bi bi-stars"></i><span>Natural Calculator</span><small>Pro</small></a>
+
+        <a class="nav-btn" href="canada.html"><i class="bi bi-flag-fill"></i><span>Canada (CAD)</span><small>FX</small></a>
+        <a class="nav-btn" href="cad.html"><i class="bi bi-image-fill"></i><span>CAD Images</span><small>SKU</small></a>
+        <a class="nav-btn" href="size.html"><i class="bi bi-rulers"></i><span>Size Chart</span><small>Guide</small></a>
+        <a class="nav-btn" href="settings.html"><i class="bi bi-gear-fill"></i><span>Settings</span><small>UI</small></a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="mini"><span class="dot"></span><span>Ready</span></div>
+        <button class="btn btn-soft btn-sm" id="toggleTheme" type="button" title="Toggle theme">
+          <i class="bi bi-moon-stars"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="cardx p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+          <div>
+            <h3 class="mb-1" style="font-weight:950;">Natural Diamond Cost Calculator</h3>
+            <div class="muted">Enter metal weight and diamond totals by size range, then Calculate.</div>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-soft" id="resetBtn" type="button"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+            <button class="btn btn-brand" id="copyBtn" type="button"><i class="bi bi-clipboard me-1"></i>Copy results</button>
+          </div>
+        </div>
+
+        <hr class="my-4" style="border-color:var(--line)">
+
+        <form id="jewelryForm">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Metal Weight (grams)</label>
+              <input type="number" step="0.01" class="form-control" id="metalWeight" value="0" min="0">
+            </div>
+
+            <div class="col-12"><label class="form-label">0.01 to 0.05 CT</label><input type="number" step="0.01" class="form-control" id="diamond0_80" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.06 to 0.10 CT</label><input type="number" step="0.01" class="form-control" id="diamond1_25" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.11 to 0.20 CT</label><input type="number" step="0.01" class="form-control" id="diamond2" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.21 to 0.30 CT</label><input type="number" step="0.01" class="form-control" id="diamond2_3" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.31 to 0.40 CT</label><input type="number" step="0.01" class="form-control" id="diamond3_1" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.41 to 0.50 CT</label><input type="number" step="0.01" class="form-control" id="diamond_41" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.51 to 0.60 CT</label><input type="number" step="0.01" class="form-control" id="diamond_51" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.61 to 0.70 CT</label><input type="number" step="0.01" class="form-control" id="diamond_61" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.71 to 0.80 CT</label><input type="number" step="0.01" class="form-control" id="diamond_71" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.81 to 0.90 CT</label><input type="number" step="0.01" class="form-control" id="diamond_81" value="0" min="0"></div>
+            <div class="col-12"><label class="form-label">0.91 to 1.00 CT</label><input type="number" step="0.01" class="form-control" id="diamond_91" value="0" min="0"></div>
+
+            <div class="col-12 mt-2">
+              <button type="submit" class="btn btn-brand w-100 py-2" style="border-radius:16px;">
+                <i class="bi bi-calculator-fill me-1"></i> Calculate
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div id="validation" class="alert-soft mt-3" style="display:none;">
+          <i class="bi bi-exclamation-triangle-fill me-1"></i> Please enter valid values (negative not allowed).
+        </div>
+
+        <div id="result" class="mt-3"></div>
+
+        <div class="foot">
+          © 2024 Kaizen Group. All rights reserved.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme
+    const root = document.documentElement;
+    function setTheme(mode){
+      if(mode === "dark") root.setAttribute("data-theme","dark");
+      else root.removeAttribute("data-theme");
+      localStorage.setItem("theme", mode);
+    }
+    function toggleThemeFn(){
+      const isDark = root.getAttribute("data-theme") === "dark";
+      setTheme(isDark ? "light" : "dark");
+    }
+    document.getElementById("toggleTheme").addEventListener("click", toggleThemeFn);
+    const savedTheme = localStorage.getItem("theme");
+    if(savedTheme) setTheme(savedTheme);
+
+    const form = document.getElementById("jewelryForm");
+    const resultDiv = document.getElementById("result");
+    const validation = document.getElementById("validation");
+
+    function val(id){ return parseFloat(document.getElementById(id).value) || 0; }
+    function anyNegative(){
+      const ids = ["metalWeight","diamond0_80","diamond1_25","diamond2","diamond2_3","diamond3_1","diamond_41","diamond_51","diamond_61","diamond_71","diamond_81","diamond_91"];
+      return ids.some(x => val(x) < 0);
+    }
+
+    form.addEventListener("submit", function(event){
+      event.preventDefault();
+
+      if(anyNegative()){
+        validation.style.display = "block";
+        resultDiv.innerHTML = "";
+        return;
+      }
+      validation.style.display = "none";
+
+      // Inputs
+      const metalWeight = val("metalWeight");
+      const diamond0_80 = val("diamond0_80");
+      const diamond1_25 = val("diamond1_25");
+      const diamond2 = val("diamond2");
+      const diamond2_3 = val("diamond2_3");
+      const diamond3_1 = val("diamond3_1");
+      const diamond_41 = val("diamond_41");
+      const diamond_51 = val("diamond_51");
+      const diamond_61 = val("diamond_61");
+      const diamond_71 = val("diamond_71");
+      const diamond_81 = val("diamond_81");
+      const diamond_91 = val("diamond_91");
+
+      // Conversion rates (same as your code)
+      const silverConversionRate = metalWeight * 1.0;
+      const gold10kConversionRate = metalWeight * 1.0;
+      const gold14kConversionRate = metalWeight * 1.0;
+      const gold18kConversionRate = metalWeight * 1.0;
+
+      // Making costs (same as your code)
+      const silverMakingCost =
+        (silverConversionRate * 150) +
+        (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
+        (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
+        (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
+        (silverConversionRate * 1000);
+
+      const gold10kMakingCost =
+        (gold10kConversionRate * 4500) +
+        (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
+        (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
+        (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
+        (gold10kConversionRate * 1000);
+
+      const gold14kMakingCost =
+        (gold14kConversionRate * 6500) +
+        (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
+        (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
+        (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
+        (gold14kConversionRate * 1000);
+
+      const gold18kMakingCost =
+        (gold18kConversionRate * 8000) +
+        (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
+        (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
+        (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
+        (gold18kConversionRate * 1000);
+
+      // Final costs (same as your code)
+      const silverFinalCost = silverMakingCost * 4.5 / 80;
+      const gold10kFinalCost = gold10kMakingCost * 3 / 80;
+      const gold14kFinalCost = gold14kMakingCost * 3 / 80;
+      const gold18kFinalCost = gold18kMakingCost * 3 / 80;
+
+      // Discount prices (same as your code)
+      const silverDiscountPrice = silverMakingCost * 6 / 80;
+      const gold10kDiscountPrice = gold10kMakingCost * 4 / 80;
+      const gold14kDiscountPrice = gold14kMakingCost * 4 / 80;
+      const gold18kDiscountPrice = gold18kMakingCost * 4 / 80;
+
+      const fmt = (n) => Number(n).toFixed(2);
+
+      resultDiv.innerHTML = `
+        <div class="table-wrap">
+          <table class="table table-bordered table-hover text-center align-middle mb-0" id="natural_table">
+            <thead>
+              <tr>
+                <th>Metal Type</th>
+                <th>Making Price</th>
+                <th>Final Price</th>
+                <th>Discount Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Silver</td>
+                <td>${fmt(silverMakingCost / 80)}</td>
+                <td>${fmt(silverFinalCost)}</td>
+                <td>${fmt(silverDiscountPrice)}</td>
+              </tr>
+              <tr>
+                <td>10K Gold</td>
+                <td>${fmt(gold10kMakingCost / 80)}</td>
+                <td>${fmt(gold10kFinalCost)}</td>
+                <td>${fmt(gold10kDiscountPrice)}</td>
+              </tr>
+              <tr>
+                <td>14K Gold</td>
+                <td>${fmt(gold14kMakingCost / 80)}</td>
+                <td>${fmt(gold14kFinalCost)}</td>
+                <td>${fmt(gold14kDiscountPrice)}</td>
+              </tr>
+              <tr>
+                <td>18K Gold</td>
+                <td>${fmt(gold18kMakingCost / 80)}</td>
+                <td>${fmt(gold18kFinalCost)}</td>
+                <td>${fmt(gold18kDiscountPrice)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    });
+
+    // Reset
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const ids = ["metalWeight","diamond0_80","diamond1_25","diamond2","diamond2_3","diamond3_1","diamond_41","diamond_51","diamond_61","diamond_71","diamond_81","diamond_91"];
+      ids.forEach(id => document.getElementById(id).value = "0");
+      resultDiv.innerHTML = "";
+      validation.style.display = "none";
+    });
+
+    // Copy results
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const table = document.querySelector("#natural_table");
+      if(!table){ alert("First calculate a result."); return; }
+      let text = [];
+      table.querySelectorAll("tr").forEach(r => {
+        const cols = Array.from(r.querySelectorAll("th,td")).map(c => c.innerText.trim());
+        text.push(cols.join("\t"));
+      });
+      try{ await navigator.clipboard.writeText(text.join("\n")); alert("Results copied."); }
+      catch{ alert("Copy failed."); }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

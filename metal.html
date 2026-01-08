@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kaizen Group - Metal Weight Conversion</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+
+  <style>
+    :root{
+      --bg1:#eef3f8; --bg2:#d7e2ee; --card:#ffffff; --text:#0f172a; --muted:#64748b;
+      --line:rgba(15,23,42,.08); --brand1:#0d6efd; --brand2:#3b82f6;
+      --shadow: 0 10px 28px rgba(15,23,42,.12); --shadow2: 0 6px 16px rgba(15,23,42,.10);
+      --radius: 18px;
+    }
+    [data-theme="dark"]{
+      --bg1:#0b1220; --bg2:#0e1a2f; --card:#0f1b33; --text:#e6edf7; --muted:#9fb0c7;
+      --line:rgba(230,237,247,.10); --shadow: 0 12px 30px rgba(0,0,0,.35); --shadow2: 0 8px 18px rgba(0,0,0,.28);
+    }
+    body{
+      min-height:100vh;
+      background: radial-gradient(1200px 500px at 10% 0%, rgba(13,110,253,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(59,130,246,.16), transparent 55%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .app{ display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar{
+      width: 300px; position: sticky; top:0; height:100vh;
+      padding: 18px 14px; border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 82%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .brand{ display:flex; align-items:center; gap:10px; padding: 10px 10px 14px; border-bottom:1px solid var(--line); margin-bottom:14px;}
+    .brand .logo{
+      width:44px;height:44px;border-radius:12px;
+      overflow:hidden; display:flex; align-items:center; justify-content:center;
+      background: color-mix(in srgb, var(--card) 85%, transparent);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow2);
+    }
+    .brand .logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;   /* FIX: prevents overflow */
+      display:block;
+    }
+    .brand h1{ font-size:15px; margin:0; font-weight:900;}
+    .brand p{ margin:0; font-size:12px; color:var(--muted); font-weight:650;}
+
+    .navpill{ display:flex; flex-direction:column; gap:8px; margin-top:12px; overflow:auto; padding-right:6px; max-height: calc(100vh - 160px); }
+    .nav-btn{
+      display:flex; align-items:center; gap:10px; padding:12px 12px; border-radius:14px;
+      border:1px solid transparent; background:transparent; color:var(--text); text-decoration:none; transition:.18s ease;
+    }
+    .nav-btn i{ font-size:18px; color:color-mix(in srgb, var(--text) 75%, var(--muted)); }
+    .nav-btn span{ font-weight:800; font-size:14px; }
+    .nav-btn small{ margin-left:auto; color:var(--muted); font-weight:800; }
+    .nav-btn:hover{
+      background: color-mix(in srgb, var(--brand1) 10%, transparent);
+      border-color: color-mix(in srgb, var(--brand1) 18%, transparent);
+      transform: translateY(-1px);
+    }
+    .nav-btn.active{
+      background: linear-gradient(90deg, color-mix(in srgb, var(--brand1) 18%, transparent), color-mix(in srgb, var(--brand2) 12%, transparent));
+      border-color: color-mix(in srgb, var(--brand1) 25%, transparent);
+      box-shadow:var(--shadow2);
+    }
+    .nav-btn.active i{ color:var(--brand1); }
+
+    .sidebar-footer{
+      position:absolute; left:14px; right:14px; bottom:14px;
+      border-top: 1px solid var(--line); padding-top:12px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .mini{ display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px; font-weight:800;}
+    .mini .dot{ width:8px;height:8px;border-radius:99px;background:#22c55e; box-shadow:0 0 0 6px rgba(34,197,94,.12); }
+
+    /* Main */
+    .main{ flex:1; padding: 26px 26px 34px; }
+    .cardx{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .muted{ color:var(--muted); font-weight:650; }
+
+    .btn-brand{
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      border:none; color:#fff; font-weight:900; border-radius:999px;
+      padding:10px 14px; box-shadow:var(--shadow2); transition:.2s ease;
+    }
+    .btn-brand:hover{ transform: translateY(-1px); box-shadow:var(--shadow); color:#fff; }
+
+    .btn-soft{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 85%, transparent);
+      color:var(--text); font-weight:900; border-radius:999px;
+      padding:10px 14px; box-shadow:var(--shadow2); transition:.2s ease;
+    }
+    .btn-soft:hover{ transform: translateY(-1px); box-shadow:var(--shadow); }
+
+    .form-control, .form-select{
+      border-radius:14px !important;
+      border:1px solid var(--line) !important;
+      background: color-mix(in srgb, var(--card) 92%, transparent) !important;
+      color: var(--text) !important;
+      font-weight:650;
+    }
+    .form-control:focus, .form-select:focus{
+      box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--brand1) 20%, transparent) !important;
+      border-color: color-mix(in srgb, var(--brand1) 35%, transparent) !important;
+    }
+    label.form-label{
+      font-weight:900; font-size:13px;
+      color: color-mix(in srgb, var(--text) 80%, var(--muted));
+    }
+
+    .resultBox{
+      margin-top: 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 90%, transparent);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+    }
+    .resRow{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 0;
+      border-bottom:1px dashed var(--line);
+      font-weight:900;
+    }
+    .resRow:last-child{ border-bottom:none; }
+    .k{ color: var(--muted); font-weight:800; }
+    .v{ font-weight:950; }
+
+    .alertx{
+      display:none;
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid color-mix(in srgb, #ef4444 18%, transparent);
+      background: color-mix(in srgb, #ef4444 10%, var(--card));
+      padding: 10px 12px;
+      font-weight:850;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"><img src="logo.jpg" alt="Kaizen Group logo"></div>
+        <div>
+          <h1>Kaizen Group</h1>
+          <p>Pricing tools</p>
+        </div>
+      </div>
+
+      <div class="navpill">
+        <a class="nav-btn" href="index.html"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span><small>Home</small></a>
+        <a class="nav-btn active" href="metal.html"><i class="bi bi-calculator-fill"></i><span>Metal Conversion</span><small>WT</small></a>
+        <a class="nav-btn" href="cvd.html"><i class="bi bi-diamond-fill"></i><span>CVD Calculator</span><small>Live</small></a>
+        <a class="nav-btn" href="natural.html"><i class="bi bi-stars"></i><span>Natural Calculator</span><small>Pro</small></a>
+        <a class="nav-btn" href="canada.html"><i class="bi bi-flag-fill"></i><span>Canada (CAD)</span><small>FX</small></a>
+        <a class="nav-btn" href="cad.html"><i class="bi bi-image-fill"></i><span>CAD Images</span><small>SKU</small></a>
+        <a class="nav-btn" href="size.html"><i class="bi bi-rulers"></i><span>Size Chart</span><small>Guide</small></a>
+        <a class="nav-btn" href="settings.html"><i class="bi bi-gear-fill"></i><span>Settings</span><small>UI</small></a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="mini"><span class="dot"></span><span>Ready</span></div>
+        <button class="btn btn-soft btn-sm" id="toggleTheme" type="button" title="Toggle theme">
+          <i class="bi bi-moon-stars"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="cardx p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+          <div>
+            <h3 class="mb-1" style="font-weight:950;">Metal Weight Conversion</h3>
+            <div class="muted">Convert gold weight between 10K, 14K, and 18K.</div>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-soft" id="resetBtn" type="button"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+            <button class="btn btn-brand" id="copyBtn" type="button"><i class="bi bi-clipboard me-1"></i>Copy</button>
+          </div>
+        </div>
+
+        <hr class="my-4" style="border-color:var(--line)">
+
+        <div class="row g-3">
+          <div class="col-md-5">
+            <label class="form-label">From</label>
+            <select class="form-select" id="fromK">
+              <option value="10">10K Gold</option>
+              <option value="14" selected>14K Gold</option>
+              <option value="18">18K Gold</option>
+            </select>
+          </div>
+
+          <div class="col-md-7">
+            <label class="form-label">Weight (grams)</label>
+            <input type="number" class="form-control" id="weight" placeholder="Enter weight in grams" min="0" step="0.01">
+          </div>
+
+          <div class="col-12 d-flex gap-2 flex-wrap mt-2">
+            <button class="btn btn-brand flex-grow-1" id="convertBtn" type="button">
+              <i class="bi bi-arrow-left-right me-1"></i>Convert
+            </button>
+          </div>
+
+          <div class="alertx" id="alertBox">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i> Please enter a valid weight.
+          </div>
+
+          <div class="col-12">
+            <div class="resultBox" id="resultBox" style="display:none;">
+              <div class="resRow"><div class="k">10K Weight</div><div class="v" id="out10">0.00 g</div></div>
+              <div class="resRow"><div class="k">14K Weight</div><div class="v" id="out14">0.00 g</div></div>
+              <div class="resRow"><div class="k">18K Weight</div><div class="v" id="out18">0.00 g</div></div>
+              <div class="muted mt-2" style="font-size:12px;">
+                Tip: Enter weight and click Convert. Press Enter for quick convert.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="muted mt-3" style="font-size:12px;">
+          © 2024 Kaizen Group. All rights reserved.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme
+    const root = document.documentElement;
+    function setTheme(mode){
+      if(mode === "dark") root.setAttribute("data-theme","dark");
+      else root.removeAttribute("data-theme");
+      localStorage.setItem("theme", mode);
+    }
+    function toggleThemeFn(){
+      const isDark = root.getAttribute("data-theme") === "dark";
+      setTheme(isDark ? "light" : "dark");
+    }
+    document.getElementById("toggleTheme").addEventListener("click", toggleThemeFn);
+    const savedTheme = localStorage.getItem("theme");
+    if(savedTheme) setTheme(savedTheme);
+
+    // Conversion helpers
+    // Your earlier ratios:
+    // 10k -> 14k = *1.13, 10k -> 18k = *1.32
+    // 14k -> 10k = *0.89, 14k -> 18k = *1.17
+    // 18k -> 10k = *0.76, 18k -> 14k = *0.85
+    function convertAll(fromK, w){
+      let w10, w14, w18;
+
+      if(fromK === 10){
+        w10 = w;
+        w14 = w * 1.13;
+        w18 = w * 1.32;
+      } else if(fromK === 14){
+        w14 = w;
+        w10 = w * 0.89;
+        w18 = w * 1.17;
+      } else { // 18
+        w18 = w;
+        w10 = w * 0.76;
+        w14 = w * 0.85;
+      }
+      return { w10, w14, w18 };
+    }
+
+    const weightEl = document.getElementById("weight");
+    const fromEl = document.getElementById("fromK");
+    const alertBox = document.getElementById("alertBox");
+    const resultBox = document.getElementById("resultBox");
+
+    function fmt(n){ return Number(n).toFixed(2) + " g"; }
+
+    function run(){
+      const fromK = parseInt(fromEl.value, 10);
+      const w = parseFloat(weightEl.value);
+
+      if(isNaN(w) || w <= 0){
+        alertBox.style.display = "block";
+        resultBox.style.display = "none";
+        return;
+      }
+
+      alertBox.style.display = "none";
+      const out = convertAll(fromK, w);
+
+      document.getElementById("out10").innerText = fmt(out.w10);
+      document.getElementById("out14").innerText = fmt(out.w14);
+      document.getElementById("out18").innerText = fmt(out.w18);
+
+      resultBox.style.display = "block";
+    }
+
+    document.getElementById("convertBtn").addEventListener("click", run);
+
+    // Enter = convert
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Enter") run();
+    });
+
+    // Reset
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      weightEl.value = "";
+      alertBox.style.display = "none";
+      resultBox.style.display = "none";
+      weightEl.focus();
+    });
+
+    // Copy
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      if(resultBox.style.display === "none"){ alert("First convert weight."); return; }
+      const t = `10K: ${document.getElementById("out10").innerText}\n14K: ${document.getElementById("out14").innerText}\n18K: ${document.getElementById("out18").innerText}`;
+      try{ await navigator.clipboard.writeText(t); alert("Copied."); }
+      catch{ alert("Copy failed."); }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
