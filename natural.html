@@ -302,44 +302,44 @@
 
       // Making costs (same as your code)
       const silverMakingCost =
-        (silverConversionRate * 150) +
+        (silverConversionRate * 500) +
         (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
         (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
         (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
         (silverConversionRate * 1000);
 
       const gold10kMakingCost =
-        (gold10kConversionRate * 4500) +
+        (gold10kConversionRate * 9000) +
         (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
         (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
         (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
-        (gold10kConversionRate * 1000);
+        (gold10kConversionRate * 1500);
 
       const gold14kMakingCost =
-        (gold14kConversionRate * 6500) +
+        (gold14kConversionRate * 12000) +
         (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
         (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
         (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
-        (gold14kConversionRate * 1000);
+        (gold14kConversionRate * 1500);
 
       const gold18kMakingCost =
-        (gold18kConversionRate * 8000) +
+        (gold18kConversionRate * 15500) +
         (diamond0_80 * 30000) + (diamond1_25 * 40000) + (diamond2 * 50000) + (diamond2_3 * 70000) +
         (diamond3_1 * 80000) + (diamond_41 * 90000) + (diamond_51 * 120000) + (diamond_61 * 150000) +
         (diamond_71 * 180000) + (diamond_81 * 220000) + (diamond_91 * 280000) +
-        (gold18kConversionRate * 1000);
+        (gold18kConversionRate * 1500);
 
       // Final costs (same as your code)
-      const silverFinalCost = silverMakingCost * 4.5 / 80;
-      const gold10kFinalCost = gold10kMakingCost * 3 / 80;
-      const gold14kFinalCost = gold14kMakingCost * 3 / 80;
-      const gold18kFinalCost = gold18kMakingCost * 3 / 80;
+      const silverFinalCost = silverMakingCost * 4.5 / 85;
+      const gold10kFinalCost = gold10kMakingCost * 3 / 85;
+      const gold14kFinalCost = gold14kMakingCost * 3 / 85;
+      const gold18kFinalCost = gold18kMakingCost * 3 / 85;
 
       // Discount prices (same as your code)
-      const silverDiscountPrice = silverMakingCost * 6 / 80;
-      const gold10kDiscountPrice = gold10kMakingCost * 4 / 80;
-      const gold14kDiscountPrice = gold14kMakingCost * 4 / 80;
-      const gold18kDiscountPrice = gold18kMakingCost * 4 / 80;
+      const silverDiscountPrice = silverMakingCost * 6 / 85;
+      const gold10kDiscountPrice = gold10kMakingCost * 4 / 85;
+      const gold14kDiscountPrice = gold14kMakingCost * 4 / 85;
+      const gold18kDiscountPrice = gold18kMakingCost * 4 / 85;
 
       const fmt = (n) => Number(n).toFixed(2);
 
@@ -410,3 +410,4 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
