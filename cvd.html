@@ -298,29 +298,42 @@
 
       let diamondCost = (d0_80 * 10000) + (d1_25 * 7500) + (d2 * 10000) + (d2_3 * 13000) + (d3_1 * 15000);
 
-      // multipliers
-      let finalFactor = (type === "solitaire") ? 2.2 : 1.8;
-      let listingFactor = (type === "solitaire") ? 2.75 : 2.25;
+      const multipliers = {
+        band: {
+          silver: { final: 2.00, listing: 2.85 },
+          gold10k: { final: 1.90, listing: 2.71 },
+          gold14k: { final: 2.00, listing: 2.85 },
+          gold18k: { final: 1.85, listing: 2.64 }
+        },
+        solitaire: {
+          silver: { final: 2.30, listing: 3.29 },
+          gold10k: { final: 2.20, listing: 3.14 },
+          gold14k: { final: 2.30, listing: 3.29 },
+          gold18k: { final: 2.40, listing: 3.43 }
+        }
+      };
+
+      const selected = multipliers[type];
 
       // silver
       let silverMakingDiv = ((metalWeight*350 + metalWeight*1000 + diamondCost + 4000) / 85);
-      let silverFinal = silverMakingDiv * finalFactor;
-      let silverListing = silverMakingDiv * listingFactor;
+      let silverFinal = silverMakingDiv * selected.silver.final;
+      let silverListing = silverMakingDiv * selected.silver.listing;
 
       // gold 10k
       let gold10kMakingDiv = ((metalWeight*7525 + metalWeight*1500 + diamondCost + 4000) / 85);
-      let gold10kFinal = gold10kMakingDiv * finalFactor;
-      let gold10kListing = gold10kMakingDiv * listingFactor;
+      let gold10kFinal = gold10kMakingDiv * selected.gold10k.final;
+      let gold10kListing = gold10kMakingDiv * selected.gold10k.listing;
 
       // gold 14k
       let gold14kMakingDiv = ((metalWeight*10500 + metalWeight*1500 + diamondCost + 4000) / 85);
-      let gold14kFinal = gold14kMakingDiv * finalFactor;
-      let gold14kListing = gold14kMakingDiv * listingFactor;
+      let gold14kFinal = gold14kMakingDiv * selected.gold14k.final;
+      let gold14kListing = gold14kMakingDiv * selected.gold14k.listing;
 
       // gold 18k
       let gold18kMakingDiv = ((metalWeight*13300 + metalWeight*1500 + diamondCost + 4000) / 85);
-      let gold18kFinal = gold18kMakingDiv * finalFactor;
-      let gold18kListing = gold18kMakingDiv * listingFactor;
+      let gold18kFinal = gold18kMakingDiv * selected.gold18k.final;
+      let gold18kListing = gold18kMakingDiv * selected.gold18k.listing;
 
       function format(value) { return value.toFixed(2); }
 
