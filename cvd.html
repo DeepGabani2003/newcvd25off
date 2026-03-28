@@ -265,6 +265,7 @@
     </main>
   </div>
 
+  
   <script>
     // Theme
     const root = document.documentElement;
@@ -282,11 +283,43 @@
     if(savedTheme) setTheme(savedTheme);
 
     const toastMsg = document.getElementById("toastMsg");
+    const btnSolitaire = document.getElementById("btnSolitaire");
+    const btnBand = document.getElementById("btnBand");
+
     function showToast(){
       toastMsg.style.display = "block";
       clearTimeout(window.__t);
       window.__t = setTimeout(()=> toastMsg.style.display = "none", 1200);
     }
+
+    function setActiveButton(type){
+      if(type === "solitaire"){
+        btnSolitaire.classList.remove("btn-soft");
+        btnSolitaire.classList.add("btn-brand");
+        btnBand.classList.remove("btn-brand");
+        btnBand.classList.add("btn-soft");
+      } else {
+        btnBand.classList.remove("btn-soft");
+        btnBand.classList.add("btn-brand");
+        btnSolitaire.classList.remove("btn-brand");
+        btnSolitaire.classList.add("btn-soft");
+      }
+    }
+
+    const multipliers = {
+      band: {
+        silver: { final: 2.00, listing: 2.85 },
+        gold10k: { final: 1.90, listing: 2.71 },
+        gold14k: { final: 2.00, listing: 2.85 },
+        gold18k: { final: 1.85, listing: 2.64 }
+      },
+      solitaire: {
+        silver: { final: 2.30, listing: 3.29 },
+        gold10k: { final: 2.20, listing: 3.14 },
+        gold14k: { final: 2.30, listing: 3.29 },
+        gold18k: { final: 2.40, listing: 3.43 }
+      }
+    };
 
     function calculatePrice(type) {
       let metalWeight = parseFloat(document.getElementById("metalWeight").value) || 0;
@@ -298,44 +331,28 @@
 
       let diamondCost = (d0_80 * 10000) + (d1_25 * 7500) + (d2 * 10000) + (d2_3 * 13000) + (d3_1 * 15000);
 
-      const multipliers = {
-        band: {
-          silver: { final: 2.00, listing: 2.85 },
-          gold10k: { final: 1.90, listing: 2.71 },
-          gold14k: { final: 2.00, listing: 2.85 },
-          gold18k: { final: 1.85, listing: 2.64 }
-        },
-        solitaire: {
-          silver: { final: 2.30, listing: 3.29 },
-          gold10k: { final: 2.20, listing: 3.14 },
-          gold14k: { final: 2.30, listing: 3.29 },
-          gold18k: { final: 2.40, listing: 3.43 }
-        }
-      };
+      let silverMakingDiv = ((metalWeight * 350) + (metalWeight * 1000) + diamondCost + 4000) / 85;
+      let gold10kMakingDiv = ((metalWeight * 7525) + (metalWeight * 1500) + diamondCost + 4000) / 85;
+      let gold14kMakingDiv = ((metalWeight * 10500) + (metalWeight * 1500) + diamondCost + 4000) / 85;
+      let gold18kMakingDiv = ((metalWeight * 13300) + (metalWeight * 1500) + diamondCost + 4000) / 85;
 
-      const selected = multipliers[type];
+      const selectedMultipliers = multipliers[type];
 
-      // silver
-      let silverMakingDiv = ((metalWeight*350 + metalWeight*1000 + diamondCost + 4000) / 85);
-      let silverFinal = silverMakingDiv * selected.silver.final;
-      let silverListing = silverMakingDiv * selected.silver.listing;
+      let silverFinal = silverMakingDiv * selectedMultipliers.silver.final;
+      let silverListing = silverMakingDiv * selectedMultipliers.silver.listing;
 
-      // gold 10k
-      let gold10kMakingDiv = ((metalWeight*7525 + metalWeight*1500 + diamondCost + 4000) / 85);
-      let gold10kFinal = gold10kMakingDiv * selected.gold10k.final;
-      let gold10kListing = gold10kMakingDiv * selected.gold10k.listing;
+      let gold10kFinal = gold10kMakingDiv * selectedMultipliers.gold10k.final;
+      let gold10kListing = gold10kMakingDiv * selectedMultipliers.gold10k.listing;
 
-      // gold 14k
-      let gold14kMakingDiv = ((metalWeight*10500 + metalWeight*1500 + diamondCost + 4000) / 85);
-      let gold14kFinal = gold14kMakingDiv * selected.gold14k.final;
-      let gold14kListing = gold14kMakingDiv * selected.gold14k.listing;
+      let gold14kFinal = gold14kMakingDiv * selectedMultipliers.gold14k.final;
+      let gold14kListing = gold14kMakingDiv * selectedMultipliers.gold14k.listing;
 
-      // gold 18k
-      let gold18kMakingDiv = ((metalWeight*13300 + metalWeight*1500 + diamondCost + 4000) / 85);
-      let gold18kFinal = gold18kMakingDiv * selected.gold18k.final;
-      let gold18kListing = gold18kMakingDiv * selected.gold18k.listing;
+      let gold18kFinal = gold18kMakingDiv * selectedMultipliers.gold18k.final;
+      let gold18kListing = gold18kMakingDiv * selectedMultipliers.gold18k.listing;
 
-      function format(value) { return value.toFixed(2); }
+      function format(value) {
+        return value.toFixed(2);
+      }
 
       document.getElementById("results").innerHTML = `
         <div class="table-wrap">
@@ -378,38 +395,50 @@
         </div>
       `;
 
+      setActiveButton(type);
       showToast();
     }
 
-    document.getElementById("btnSolitaire").addEventListener("click", ()=> calculatePrice("solitaire"));
-    document.getElementById("btnBand").addEventListener("click", ()=> calculatePrice("band"));
+    btnSolitaire.addEventListener("click", () => calculatePrice("solitaire"));
+    btnBand.addEventListener("click", () => calculatePrice("band"));
 
-    // Enter key = solitaire
     document.addEventListener("keydown", function(e) {
       if (e.key === "Enter") calculatePrice("solitaire");
     });
 
-    // Reset
     document.getElementById("resetBtn").addEventListener("click", () => {
       document.getElementById("metalWeight").value = "";
       ["diamond0_80","diamond1_25","diamond2","diamond2_3","diamond3_1"].forEach(id => document.getElementById(id).value = "0");
       document.getElementById("results").innerHTML = `Click <b>Solitaire</b> or <b>Band</b> to show the table.`;
+      btnSolitaire.classList.remove("btn-soft");
+      btnSolitaire.classList.add("btn-brand");
+      btnBand.classList.remove("btn-brand");
+      btnBand.classList.add("btn-soft");
       toastMsg.style.display = "none";
     });
 
-    // Copy table
     document.getElementById("copyBtn").addEventListener("click", async () => {
       const table = document.querySelector("#cvd_table");
-      if(!table){ alert("First calculate a result."); return; }
+      if(!table){
+        alert("First calculate a result.");
+        return;
+      }
+
       let text = [];
       table.querySelectorAll("tr").forEach(r => {
         const cols = Array.from(r.querySelectorAll("th,td")).map(c => c.innerText.trim());
         text.push(cols.join("\t"));
       });
-      try{ await navigator.clipboard.writeText(text.join("\n")); alert("Table copied."); }
-      catch{ alert("Copy failed."); }
+
+      try {
+        await navigator.clipboard.writeText(text.join("\n"));
+        alert("Table copied.");
+      } catch {
+        alert("Copy failed.");
+      }
     });
   </script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
