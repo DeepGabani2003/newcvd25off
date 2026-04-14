@@ -233,11 +233,11 @@
             <input type="number" id="metalWeight" class="form-control" placeholder="Enter weight in grams" min="0" step="0.01">
           </div>
 
-          <div class="col-12"><label class="form-label">Diamonds (0 to 0.10 ct)</label><input type="number" id="diamond0_80" class="form-control" value="0" min="0" step="0.01"></div>
-          <div class="col-12"><label class="form-label">Diamonds (0.10 to 0.50 ct)</label><input type="number" id="diamond1_25" class="form-control" value="0" min="0" step="0.01"></div>
-          <div class="col-12"><label class="form-label">Diamonds (0.50 to 1.00 ct)</label><input type="number" id="diamond2" class="form-control" value="0" min="0" step="0.01"></div>
-          <div class="col-12"><label class="form-label">Diamonds (1.00 to 3.00 ct)</label><input type="number" id="diamond2_3" class="form-control" value="0" min="0" step="0.01"></div>
-          <div class="col-12"><label class="form-label">Diamonds (3.00 to 5.00 ct)</label><input type="number" id="diamond3_1" class="form-control" value="0" min="0" step="0.01"></div>
+          <div class="col-12"><label class="form-label">Diamonds (0.00 to 0.01 ct)</label><input type="number" id="diamond0_80" class="form-control" value="0" min="0" step="0.01"></div>
+          <div class="col-12"><label class="form-label">Diamonds (0.01 to 0.99 ct)</label><input type="number" id="diamond1_25" class="form-control" value="0" min="0" step="0.01"></div>
+          <div class="col-12"><label class="form-label">Diamonds (1.00 to 1.99 ct)</label><input type="number" id="diamond2" class="form-control" value="0" min="0" step="0.01"></div>
+          <div class="col-12"><label class="form-label">Diamonds (2.00 to 2.99 ct)</label><input type="number" id="diamond2_3" class="form-control" value="0" min="0" step="0.01"></div>
+          <div class="col-12"><label class="form-label">Diamonds (3.00 to 3.99 ct)</label><input type="number" id="diamond3_1" class="form-control" value="0" min="0" step="0.01"></div>
         </div>
 
         <!-- Buttons -->
@@ -308,16 +308,16 @@
 
     const multipliers = {
       band: {
-        silver: { final: 2.00, listing: 2.85 },
-        gold10k: { final: 1.90, listing: 2.71 },
-        gold14k: { final: 2.00, listing: 2.85 },
-        gold18k: { final: 1.85, listing: 2.64 }
+        silver: { final: 1.85, listing: 2.64 },
+        gold10k: { final: 1.80, listing: 2.57 },
+        gold14k: { final: 1.90, listing: 2.71 },
+        gold18k: { final: 1.75, listing: 2.50 }
       },
       solitaire: {
-        silver: { final: 2.30, listing: 3.29 },
-        gold10k: { final: 2.20, listing: 3.14 },
-        gold14k: { final: 2.30, listing: 3.29 },
-        gold18k: { final: 2.40, listing: 3.43 }
+        silver: { final: 2.10, listing: 3.00},
+        gold10k: { final: 2.05, listing: 2.93 },
+        gold14k: { final: 2.10, listing: 3.00 },
+        gold18k: { final: 2.15, listing: 3.07 }
       }
     };
 
@@ -329,12 +329,12 @@
       let d2_3 = parseFloat(document.getElementById("diamond2_3").value) || 0;
       let d3_1 = parseFloat(document.getElementById("diamond3_1").value) || 0;
 
-      let diamondCost = (d0_80 * 10000) + (d1_25 * 7500) + (d2 * 10000) + (d2_3 * 13000) + (d3_1 * 15000);
+      let diamondCost = (d0_80 * 10000) + (d1_25 * 7000) + (d2 * 11000) + (d2_3 * 12000) + (d3_1 * 13000);
 
-      let silverMakingDiv = ((metalWeight * 350) + (metalWeight * 1000) + diamondCost + 4000) / 85;
-      let gold10kMakingDiv = ((metalWeight * 7525) + (metalWeight * 1500) + diamondCost + 4000) / 85;
-      let gold14kMakingDiv = ((metalWeight * 10500) + (metalWeight * 1500) + diamondCost + 4000) / 85;
-      let gold18kMakingDiv = ((metalWeight * 13300) + (metalWeight * 1500) + diamondCost + 4000) / 85;
+      let silverMakingDiv = ((metalWeight * 350) + (metalWeight * 800) + diamondCost + 4000) / 85;
+      let gold10kMakingDiv = ((metalWeight * 7292) + (metalWeight * 1200) + diamondCost + 4000) / 85;
+      let gold14kMakingDiv = ((metalWeight * 10208) + (metalWeight * 1200) + diamondCost + 4000) / 85;
+      let gold18kMakingDiv = ((metalWeight * 13125) + (metalWeight * 1200) + diamondCost + 4000) / 85;
 
       const selectedMultipliers = multipliers[type];
 
